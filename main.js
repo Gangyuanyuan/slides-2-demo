@@ -1,6 +1,6 @@
 let n
 初始化()
-setInterval(function(){
+let timer = setInterval(function(){
 	makeLeave(getImage(n))
 		.one('transitionend', function(e){
 			makeEnter($(e.currentTarget))
@@ -8,6 +8,20 @@ setInterval(function(){
 	makeCurrent(getImage(n+1))
 	n += 1
 }, 2000)
+document.addEventListener('visibilitychange', function(e){ // 页面可见性
+	if(document.hidden){ // 页面不可见时暂停Interval
+		window.clearInterval(timer)
+	}else{
+		timer = setInterval(function(){
+			makeLeave(getImage(n))
+				.one('transitionend', function(e){
+					makeEnter($(e.currentTarget))
+				})
+			makeCurrent(getImage(n+1))
+			n += 1
+		}, 2000)
+	}
+})
 
 
 function x(n){
